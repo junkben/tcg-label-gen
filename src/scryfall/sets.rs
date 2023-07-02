@@ -1,16 +1,15 @@
-use serde::{Deserialize, Serialize};
-
-/// A Set object represents a group of related Magic cards. All Card objects on
-/// Scryfall belong to exactly one set.
+/// A [`Set`](https://scryfall.com/docs/api/sets) object represents a group of
+/// related Magic cards. All Card objects on Scryfall belong to exactly one
+/// set.
 ///
 /// Due to Magic’s long and complicated history, Scryfall includes many
 /// un-official sets as a way to group promotional or outlier cards together.
-/// Such sets will likely have a code that begins with `p` or `t`, such as
+/// Such sets will likely have a `code` that begins with `p` or `t`, such as
 /// `pcel` or `tori`.
 ///
 /// Official sets always have a three-letter set code, such as `zen`.
-#[derive(Serialize, Deserialize)]
-struct ScryfallSetObject {
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ScryfallSet {
     /// A unique ID for this set on Scryfall that will not change.
     id:              String,
     /// The unique three to five-letter code for this set.
@@ -18,7 +17,8 @@ struct ScryfallSetObject {
     /// The unique code for this set on MTGO, which may differ from the regular
     /// code.
     mtgo_code:       Option<String>,
-    /// This set’s ID on [TCGplayer’s API](https://docs.tcgplayer.com/docs), also known as the groupId
+    /// This set’s ID on [TCGplayer’s API](https://docs.tcgplayer.com/docs),
+    /// also known as the `groupId`
     tcgplayer_id:    Option<u32>,
     /// The English name of the set.
     name:            String,
@@ -31,8 +31,8 @@ struct ScryfallSetObject {
     block_code:      Option<String>,
     /// The block or group name code for this set, if any.
     block:           Option<String>,
-    /// The set code for the parent set, if any. promo and token sets often have
-    /// a parent set.
+    /// The set code for the parent set, if any. `promo` and `token` sets often
+    /// have a parent set.
     parent_set_code: Option<String>,
     /// The number of cards in this set.
     card_count:      u32,
@@ -60,7 +60,7 @@ struct ScryfallSetObject {
 
 /// Scryfall provides an overall categorization for each Set in the `set_type`
 /// property.
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 enum ScryfallSetType {
     /// A yearly Magic core set (Tenth Edition, etc)
