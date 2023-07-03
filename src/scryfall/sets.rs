@@ -43,7 +43,7 @@ pub fn get_all_sets(
 /// `pcel` or `tori`.
 ///
 /// Official sets always have a three-letter set code, such as `zen`.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Getters, Clone)]
 pub struct ScryfallSet {
     /// A unique ID for this set on Scryfall that will not change.
     id:              String,
@@ -95,9 +95,9 @@ pub struct ScryfallSet {
 
 /// Scryfall provides an overall categorization for each Set in the `set_type`
 /// property.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "snake_case")]
-enum ScryfallSetType {
+pub enum ScryfallSetType {
     /// A yearly Magic core set (Tenth Edition, etc)
     Core,
     /// A rotational expansion set in a block (Zendikar, etc)

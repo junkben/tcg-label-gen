@@ -2,7 +2,7 @@
 /// requested sequence of other objects (Cards, Sets, etc). List objects may be
 /// paginated, and also include information about issues raised when generating
 /// the list.
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Deserialize, Serialize, Getters)]
 pub struct ScryfallList<T> {
     /// An array of the requested objects, in a specific order.
     data:        Vec<T>,
