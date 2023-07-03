@@ -8,16 +8,21 @@ use crate::label::Label;
 extern crate tera;
 
 mod label;
+mod label_generator;
+mod paper_size;
 mod scryfall;
 
 fn main() { go().unwrap() }
 
 fn go() -> anyhow::Result<()> {
-    let set_list = get_all_sets("json".to_owned(), true)?;
+    let format = "json".to_owned();
+    let pretty = true;
+    let set_list = get_all_sets(format, pretty)?;
     let sets = set_list.data().clone();
     let labels = sets.into_iter().map(Label::from).collect::<Vec<_>>();
 
-    let tera = Tera::new("templates/**/*.html")?;
+    // https://tera.netlify.app/docs
+    let svg_tera = Tera::new("templates/**/*.svg")?;
 
     println!("Labels: {labels:?}");
     Ok(())
