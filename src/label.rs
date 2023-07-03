@@ -1,6 +1,8 @@
 use crate::scryfall::ScryfallSet;
 
-#[derive(Serialize, Deserialize, Debug)]
+const NAME_LEN_MAX: usize = 24;
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Label {
     name:     String,
     code:     String,
@@ -12,13 +14,17 @@ pub struct Label {
 
 impl Label {
     pub fn new(scryfall_set: ScryfallSet, position: (u32, u32)) -> Label {
+        let name = match scryfall_set.name() {
+            n if n.len() > NAME_LEN_MAX => n[..NAME_LEN_MAX].to_owned(),
+            n => n.to_owned()
+        };
         Label {
-            name:     scryfall_set.name().clone(),
-            code:     scryfall_set.code().clone(),
+            name,
+            code: scryfall_set.code().clone(),
             icon_url: scryfall_set.icon_svg_uri().clone(),
-            date:     scryfall_set.released_at().clone(),
-            x:        position.0,
-            y:        position.1
+            date: scryfall_set.released_at().clone(),
+            x: position.0,
+            y: position.1
         }
     }
 }

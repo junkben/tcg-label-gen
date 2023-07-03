@@ -4,8 +4,8 @@ use crate::{
 };
 
 const PAPER_SIZE: PaperSize = PaperSize::Letter;
-const COLUMNS: u32 = 4;
-const ROWS: u32 = 15;
+const COLUMNS: u32 = 3;
+const ROWS: u32 = 20;
 const MARGIN: u32 = 200;
 
 pub struct LabelGenerator {
@@ -136,13 +136,26 @@ impl LabelGenerator {
         Ok(labels)
     }
 
-    pub fn create_label_svg_render(&self) -> anyhow::Result<MtgLabelSvgRender> {
-        Ok(MtgLabelSvgRender {
-            labels:            self.create_labels()?,
-            horizontal_guides: self.create_horizontal_cutting_guides(),
-            vertical_guides:   self.create_vertical_cutting_guides(),
-            paper_width:       self.paper_size.width_mm(),
-            paper_height:      self.paper_size.height_mm()
-        })
+    pub fn create_label_svg_renders(
+        &self
+    ) -> anyhow::Result<Vec<MtgLabelSvgRender>> {
+        let labels: Vec<Label> = self.create_labels()?;
+        let horizontal_guides = self.create_horizontal_cutting_guides();
+        let vertical_guides = self.create_vertical_cutting_guides();
+        let paper_width = self.paper_size.width_mm();
+        let paper_height = self.paper_size.height_mm();
+
+        let renders = labels
+            .chunks(self.num_labels_per_page() as usize)
+            .into_iter()
+            .map(|labels| MtgLabelSvgRender {
+                labels: labels.to_vec(),
+                horizontal_guides: horizontal_guides.clone(),
+                vertical_guides: vertical_guides.clone(),
+                paper_width,
+                paper_height
+            })
+            .collect::<Vec<_>>();
+        Ok(renders)
     }
 }
