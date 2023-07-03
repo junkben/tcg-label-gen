@@ -7,6 +7,7 @@ use crate::label_generator::LabelGenerator;
 extern crate tera;
 
 mod cutting_guide;
+mod filters;
 mod label;
 mod label_generator;
 mod label_render;

@@ -1,6 +1,10 @@
 use crate::{
-    cutting_guide::CuttingGuide, label::Label, label_render::MtgLabelSvgRender,
-    paper_size::PaperSize, scryfall::get_all_sets
+    cutting_guide::CuttingGuide,
+    filters::SetTypeFilter,
+    label::Label,
+    label_render::MtgLabelSvgRender,
+    paper_size::PaperSize,
+    scryfall::{get_all_sets, ScryfallSet}
 };
 
 const PAPER_SIZE: PaperSize = PaperSize::Letter;
@@ -12,7 +16,8 @@ pub struct LabelGenerator {
     paper_size:  PaperSize,
     num_columns: u32,
     num_rows:    u32,
-    margin:      u32
+    margin:      u32,
+    set_filter:  SetTypeFilter
 }
 
 impl Default for LabelGenerator {
@@ -21,7 +26,8 @@ impl Default for LabelGenerator {
             paper_size:  PAPER_SIZE,
             num_columns: COLUMNS,
             num_rows:    ROWS,
-            margin:      MARGIN
+            margin:      MARGIN,
+            set_filter:  SetTypeFilter::default()
         }
     }
 }
@@ -105,9 +111,18 @@ impl LabelGenerator {
         vertical_guides
     }
 
-    fn create_labels(&self) -> anyhow::Result<Vec<Label>> {
+    fn get_sets(&self) -> anyhow::Result<Vec<ScryfallSet>> {
         let set_list = get_all_sets()?;
         let sets = set_list.data().clone();
+        let filtered_sets = sets
+            .into_iter()
+            .filter(|set| self.set_filter.allowed(set.set_type()))
+            .collect::<Vec<_>>();
+        Ok(filtered_sets)
+    }
+
+    fn create_labels(&self) -> anyhow::Result<Vec<Label>> {
+        let sets = self.get_sets()?;
         let (start_x, start_y) = (self.margin, self.margin);
 
         let (mut x, mut y) = (start_x, start_y);
