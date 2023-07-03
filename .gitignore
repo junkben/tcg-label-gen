@@ -17,4 +17,4 @@ Cargo.lock
 .vscode/
 
 # Ignore program output
-output/
+output/*.svg
