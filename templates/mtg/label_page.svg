@@ -1,9 +1,9 @@
 <svg
     version="1.1"
     baseProfile="full"
-    width="{{ WIDTH / 10 }}mm"
-    height="{{ HEIGHT / 10 }}mm"
-    viewBox="0 0 {{ WIDTH }} {{ HEIGHT }}"
+    width="{{ paper_width / 10 }}mm"
+    height="{{ paper_height / 10 }}mm"
+    viewBox="0 0 {{ paper_width }} {{ paper_height }}"
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink">
 
@@ -26,7 +26,7 @@
             font-size="25"
             dominant-baseline="hanging"
             style="font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-        >{{ label.code | upper | escape }} - {{ label.date.strftime('%B %Y') }}</text>
+        >{{ label.code | upper | escape }} - {{ label.date }}</text>
 
         <!-- Icon -->
         <image

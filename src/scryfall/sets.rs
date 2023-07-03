@@ -21,13 +21,10 @@ impl super::ScryfallGetEndpoint for ScryfallGetAllSets {
     fn url() -> String { "https://api.scryfall.com/sets".to_owned() }
 }
 
-pub fn get_all_sets(
-    format: String,
-    pretty: bool
-) -> anyhow::Result<ScryfallResponseGetAllSets> {
+pub fn get_all_sets() -> anyhow::Result<ScryfallResponseGetAllSets> {
     let request = ScryfallRequestGetAllSets {
-        format: Some(format),
-        pretty: Some(pretty)
+        format: Some("json".to_owned()),
+        pretty: Some(true)
     };
 
     <ScryfallGetAllSets as super::ScryfallGetEndpoint>::get(request)
