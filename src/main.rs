@@ -1,15 +1,13 @@
-use crate::scryfall::{ScryfallList, ScryfallSet};
+use scryfall::get_all_sets;
 
 #[macro_use] extern crate serde;
 
 mod scryfall;
 
-fn main() -> anyhow::Result<()> {
-    let resp = reqwest::blocking::get("https://api.scryfall.com/sets/")?;
-    let resp_text = resp.text()?;
-    let set_list: ScryfallList<ScryfallSet> =
-        serde_json::from_str(&resp_text).unwrap();
+fn main() { go().unwrap() }
 
-    println!("{:?}", set_list);
+fn go() -> anyhow::Result<()> {
+    let sets = get_all_sets("json".to_owned(), true)?;
+    println!("Sets: {sets:?}");
     Ok(())
 }

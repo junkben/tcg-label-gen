@@ -1,3 +1,38 @@
+use super::ScryfallList;
+
+/// Returns a [List object](src\scryfall\lists.rs) of all Sets on Scryfall.
+#[derive(Debug, Serialize, Deserialize, Default)]
+pub struct ScryfallRequestGetAllSets {
+    /// The data format to return. This method only supports `json`.
+    format: Option<String>,
+    /// If true, the returned JSON will be prettified. Avoid using for
+    /// production code.
+    pretty: Option<bool>
+}
+
+pub type ScryfallResponseGetAllSets = ScryfallList<ScryfallSet>;
+
+pub struct ScryfallGetAllSets {}
+
+impl super::ScryfallGetEndpoint for ScryfallGetAllSets {
+    type Request = ScryfallRequestGetAllSets;
+    type Response = ScryfallResponseGetAllSets;
+
+    fn url() -> String { "https://api.scryfall.com/sets".to_owned() }
+}
+
+pub fn get_all_sets(
+    format: String,
+    pretty: bool
+) -> anyhow::Result<ScryfallResponseGetAllSets> {
+    let request = ScryfallRequestGetAllSets {
+        format: Some(format),
+        pretty: Some(pretty)
+    };
+
+    <ScryfallGetAllSets as super::ScryfallGetEndpoint>::get(request)
+}
+
 /// A [`Set`](https://scryfall.com/docs/api/sets) object represents a group of
 /// related Magic cards. All Card objects on Scryfall belong to exactly one
 /// set.
