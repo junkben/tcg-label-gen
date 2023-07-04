@@ -6,6 +6,7 @@ use crate::label_generator::LabelGenerator;
 #[macro_use] extern crate derive_getters;
 extern crate tera;
 
+mod css;
 mod cutting_guide;
 mod filters;
 mod label;
@@ -26,7 +27,7 @@ fn go() -> anyhow::Result<()> {
     for render in label_renders {
         println!("rendering labels_{:03}.svg", page);
         let context = Context::from_serialize(render)?;
-        let svg = svg_tera.render("mtg/label_page.svg", &context)?;
+        let svg = svg_tera.render("mtg/label_page_proto.svg", &context)?;
         let filename = format!("output/labels_{:03}.svg", page);
         std::fs::write(filename.as_str(), &svg)?;
 

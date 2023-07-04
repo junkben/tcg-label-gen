@@ -1,6 +1,6 @@
 use crate::{cutting_guide::CuttingGuide, label::Label};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize)]
 pub struct MtgLabelSvgRender {
     pub labels:            Vec<Label>,
     pub horizontal_guides: Vec<CuttingGuide>,

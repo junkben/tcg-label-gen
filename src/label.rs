@@ -1,13 +1,15 @@
-use crate::scryfall::ScryfallSet;
+use crate::{
+    css::{font_size::CssFontSize, length::CssLength},
+    scryfall::ScryfallSet
+};
 
 const NAME_LEN_MAX: usize = 24;
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Debug, Clone)]
 pub struct Label {
-    name:     String,
-    code:     String,
-    date:     Option<String>,
-    icon_url: String,
+    set_name: LabelTextElement,
+    set_code: LabelTextElement,
+    set_icon: LabelImageElement,
     x:        u32,
     y:        u32
 }
@@ -18,13 +20,52 @@ impl Label {
             n if n.len() > NAME_LEN_MAX => n[..NAME_LEN_MAX].to_owned(),
             n => n.to_owned()
         };
+        let set_name = LabelTextElement {
+            offset_x:  30,
+            offset_y:  30,
+            font_size: CssFontSize::Length(CssLength::pixels(35)),
+            text:      name
+        };
+        let set_code = LabelTextElement {
+            offset_x:  30,
+            offset_y:  70,
+            font_size: CssFontSize::Length(CssLength::pixels(25)),
+            text:      format!(
+                "{} - {}",
+                scryfall_set.code().clone(),
+                scryfall_set.released_at().clone().unwrap()
+            )
+        };
+        let set_icon = LabelImageElement {
+            offset_x: 490,
+            offset_y: 20,
+            width:    CssLength::pixels(70),
+            height:   CssLength::pixels(70),
+            href:     scryfall_set.icon_svg_uri().clone()
+        };
         Label {
-            name,
-            code: scryfall_set.code().clone(),
-            icon_url: scryfall_set.icon_svg_uri().clone(),
-            date: scryfall_set.released_at().clone(),
+            set_name,
+            set_code,
+            set_icon,
             x: position.0,
             y: position.1
         }
     }
+}
+
+#[derive(Serialize, Debug, Clone)]
+pub struct LabelImageElement {
+    offset_x: u32,
+    offset_y: u32,
+    width:    CssLength,
+    height:   CssLength,
+    href:     String
+}
+
+#[derive(Serialize, Debug, Clone)]
+pub struct LabelTextElement {
+    offset_x:  u32,
+    offset_y:  u32,
+    font_size: CssFontSize,
+    text:      String
 }

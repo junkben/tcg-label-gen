@@ -8,33 +8,33 @@
     xmlns:xlink="http://www.w3.org/1999/xlink">
 
     {% for label in labels %}
-    <!-- Label: {{ label.name }} -->
+    <!-- Label: {{ label.set_name.text }} -->
     <g>
         <!-- Name -->
         <text
-            x="{{ label.x + 30 }}px"
-            y="{{ label.y + 30 }}px"
-            font-size="35px"
+            x="{{ label.x + label.set_name.offset_x }}px"
+            y="{{ label.y + label.set_name.offset_y }}px"
+            font-size="{{ label.set_name.font_size }}"
             dominant-baseline="hanging"
             style="font-weight: bold; font-family: 'EB Garamond', 'Times New Roman', serif"
-        >{{ label.name | escape }}</text>
+        >{{ label.set_name.text | escape }}</text>
 
         <!-- Code and Date -->
         <text
-            x="{{ label.x + 30 }}px"
-            y="{{ label.y + 70 }}px"
-            font-size="25px"
+            x="{{ label.x + label.set_code.offset_x }}px"
+            y="{{ label.y + label.set_code.offset_y }}px"
+            font-size="{{ label.set_code.font_size }}"
             dominant-baseline="hanging"
             style="font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-        >{{ label.code | upper | escape }} - {{ label.date }}</text>
+        >{{ label.set_code.text | upper | escape }}</text>
 
         <!-- Icon -->
         <image
-            x="{{ label.x + 490 }}px"
-            y="{{ label.y + 20 }}px"
-            width="70px"
-            height="70px"
-            href="{{ label.icon_url }}"
+            x="{{ label.x + label.set_icon.offset_x }}px"
+            y="{{ label.y + label.set_icon.offset_y }}px"
+            width="{{ label.set_icon.width }}"
+            height="{{ label.set_icon.height }}"
+            href="{{ label.set_icon.href }}"
         ></image>
     </g>
     {% endfor %}
