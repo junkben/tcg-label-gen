@@ -20,6 +20,10 @@ pub enum CssFontSize {
     Percentage(u32)
 }
 
+impl Default for CssFontSize {
+    fn default() -> Self { CssFontSize::Medium }
+}
+
 impl serde::ser::Serialize for CssFontSize {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where

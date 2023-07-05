@@ -1,68 +1,61 @@
-<svg
-    version="1.1"
-    baseProfile="full"
-    width="{{ paper_width / 10 }}mm"
-    height="{{ paper_height / 10 }}mm"
-    viewBox="0 0 {{ paper_width }} {{ paper_height }}"
-    xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink">
+<html>
+    <svg
+        version="1.1"
+        baseProfile="full"
+        width="{{ paper_width / 10 }}mm"
+        height="{{ paper_height / 10 }}mm"
+        viewBox="0 0 {{ paper_width }} {{ paper_height }}"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink">
 
-    {% for label in labels %}
-    <!-- Label: {{ label.set_name.text }} -->
-    <g>
-        <!-- Name -->
-        <text
-            x="{{ label.x + label.set_name.offset_x }}px"
-            y="{{ label.y + label.set_name.offset_y }}px"
-            font-size="{{ label.set_name.font_size }}"
-            dominant-baseline="hanging"
-            style="font-weight: bold; font-family: 'EB Garamond', 'Times New Roman', serif"
-        >{{ label.set_name.text | escape }}</text>
-
-        <!-- Code and Date -->
-        <text
-            x="{{ label.x + label.set_code.offset_x }}px"
-            y="{{ label.y + label.set_code.offset_y }}px"
-            font-size="{{ label.set_code.font_size }}"
-            dominant-baseline="hanging"
-            style="font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-        >{{ label.set_code.text | upper | escape }}</text>
-
-        <!-- Icon -->
-        <image
-            x="{{ label.x + label.set_icon.offset_x }}px"
-            y="{{ label.y + label.set_icon.offset_y }}px"
-            width="{{ label.set_icon.width }}"
-            height="{{ label.set_icon.height }}"
-            href="{{ label.set_icon.href }}"
-        ></image>
-    </g>
-    {% endfor %}
-
-    <!-- Cutting guides -->
-    <g>
-        <!-- Horizontal -->
-        {% for guide in horizontal_guides %}
-        <line
-            x1="{{ guide.x1 }}px"
-            y1="{{ guide.y1 }}px"
-            x2="{{ guide.x2 }}px"
-            y2="{{ guide.y2 }}px"
-            stroke="black"
-            stroke-width="2"
-        ></line>
+        {% for label in labels %}<g>
+            {% for lt in label.text_elements %}<!-- Text: {{ lt.text }} -->
+            <text
+                x="{{ lt.x }}"
+                y="{{ lt.y }}"
+                font-size="{{ lt.font_size }}"
+                font-family="{{ lt.font_family }}"
+                font-weight="{{ lt.font_weight }}"
+                dominant-baseline="{{ lt.dominant_baseline }}"
+                text_align="{{ lt.text_align }}"
+            >{{ lt.text | escape }}</text>
+            {% endfor %}{% for li in label.image_elements %}<!-- Image -->
+            <image
+                x="{{ li.x }}"
+                y="{{ li.y }}"
+                width="{{ li.width }}"
+                height="{{ li.height }}"
+                href="{{ li.href }}"
+            ></image>
+            {% endfor %}
+        </g>
         {% endfor %}
 
-        <!-- Vertical -->
-        {% for guide in vertical_guides %}
-        <line
-            x1="{{ guide.x1 }}px"
-            y1="{{ guide.y1 }}px"
-            x2="{{ guide.x2 }}px"
-            y2="{{ guide.y2 }}px"
-            stroke="black"
-            stroke-width="2"
-        ></line>
-        {% endfor %}
-    </g>
-</svg>
+        <!-- Cutting guides -->
+        <g>
+            <!-- Horizontal -->
+            {% for guide in horizontal_guides %}
+            <line
+                x1="{{ guide.x1 }}px"
+                y1="{{ guide.y1 }}px"
+                x2="{{ guide.x2 }}px"
+                y2="{{ guide.y2 }}px"
+                stroke="black"
+                stroke-width="2"
+            ></line>
+            {% endfor %}
+
+            <!-- Vertical -->
+            {% for guide in vertical_guides %}
+            <line
+                x1="{{ guide.x1 }}px"
+                y1="{{ guide.y1 }}px"
+                x2="{{ guide.x2 }}px"
+                y2="{{ guide.y2 }}px"
+                stroke="black"
+                stroke-width="2"
+            ></line>
+            {% endfor %}
+        </g>
+    </svg>
+</html>

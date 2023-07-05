@@ -18,4 +18,5 @@ Cargo.lock
 
 # Ignore program output
 output/*.svg
+output/*.html
 output/*.pdf

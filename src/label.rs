@@ -1,71 +1,64 @@
 use crate::{
-    css::{font_size::CssFontSize, length::CssLength},
+    css::{
+        elements::{
+            CssImageElement, CssImageElementBuilder, CssTextElement,
+            CssTextElementBuilder
+        },
+        properties::{CssFont, CssFontSize, CssFontWeight, CssLength}
+    },
     scryfall::ScryfallSet
 };
 
 const NAME_LEN_MAX: usize = 24;
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Serialize, Debug, Clone, Default)]
 pub struct Label {
-    set_name: LabelTextElement,
-    set_code: LabelTextElement,
-    set_icon: LabelImageElement,
-    x:        u32,
-    y:        u32
+    text_elements:  Vec<CssTextElement>,
+    image_elements: Vec<CssImageElement>
 }
 
 impl Label {
-    pub fn new(scryfall_set: ScryfallSet, position: (u32, u32)) -> Label {
+    pub fn new(scryfall_set: ScryfallSet, x: u32, y: u32) -> Label {
         let name = match scryfall_set.name() {
             n if n.len() > NAME_LEN_MAX => n[..NAME_LEN_MAX].to_owned(),
             n => n.to_owned()
         };
-        let set_name = LabelTextElement {
-            offset_x:  30,
-            offset_y:  30,
-            font_size: CssFontSize::Length(CssLength::pixels(35)),
-            text:      name
-        };
-        let set_code = LabelTextElement {
-            offset_x:  30,
-            offset_y:  70,
-            font_size: CssFontSize::Length(CssLength::pixels(25)),
-            text:      format!(
+
+        let name_text_element = CssTextElementBuilder::default()
+            .x(CssLength::pixels(x + 30))
+            .y(CssLength::pixels(y + 30))
+            .font_size(CssFontSize::Length(CssLength::pixels(35)))
+            .font_weight(CssFontWeight::Bold)
+            .font_family(CssFont::EBGaramond)
+            .text(name)
+            .build()
+            .unwrap();
+
+        let set_text_element = CssTextElementBuilder::default()
+            .x(CssLength::pixels(x + 30))
+            .y(CssLength::pixels(y + 70))
+            .font_size(CssFontSize::Length(CssLength::pixels(25)))
+            .font_family(CssFont::SourceSansPro)
+            .text(format!(
                 "{} - {}",
-                scryfall_set.code().clone(),
+                scryfall_set.code().clone().to_uppercase(),
                 scryfall_set.released_at().clone().unwrap()
-            )
-        };
-        let set_icon = LabelImageElement {
-            offset_x: 490,
-            offset_y: 20,
-            width:    CssLength::pixels(70),
-            height:   CssLength::pixels(70),
-            href:     scryfall_set.icon_svg_uri().clone()
-        };
+            ))
+            .build()
+            .unwrap();
+
+        let set_icon = CssImageElementBuilder::default()
+            .x(CssLength::pixels(x + 490))
+            .y(CssLength::pixels(y + 20))
+            .width(CssLength::pixels(70))
+            .height(CssLength::pixels(70))
+            .href(scryfall_set.icon_svg_uri().clone())
+            .build()
+            .unwrap();
+
         Label {
-            set_name,
-            set_code,
-            set_icon,
-            x: position.0,
-            y: position.1
+            text_elements:  Vec::from([name_text_element, set_text_element]),
+            image_elements: Vec::from([set_icon])
         }
     }
-}
-
-#[derive(Serialize, Debug, Clone)]
-pub struct LabelImageElement {
-    offset_x: u32,
-    offset_y: u32,
-    width:    CssLength,
-    height:   CssLength,
-    href:     String
-}
-
-#[derive(Serialize, Debug, Clone)]
-pub struct LabelTextElement {
-    offset_x:  u32,
-    offset_y:  u32,
-    font_size: CssFontSize,
-    text:      String
 }

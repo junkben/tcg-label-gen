@@ -1,4 +1,4 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct CssLength {
     value: u32,
     unit:  CssLengthUnit
@@ -65,7 +65,7 @@ impl CssLength {
 }
 
 #[derive(Debug, Clone)]
-pub enum CssLengthUnit {
+enum CssLengthUnit {
     Pixel,
     Centimeter,
     Millimeter,

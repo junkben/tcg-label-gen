@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use tera::{Context, Tera};
 
 use crate::label_generator::LabelGenerator;
@@ -5,6 +6,7 @@ use crate::label_generator::LabelGenerator;
 #[macro_use] extern crate serde;
 #[macro_use] extern crate derive_getters;
 extern crate tera;
+#[macro_use] extern crate derive_builder;
 
 mod css;
 mod cutting_guide;
@@ -25,10 +27,10 @@ fn go() -> anyhow::Result<()> {
     let svg_tera = Tera::new("templates/**/*.svg")?;
     let mut page = 1;
     for render in label_renders {
-        println!("rendering labels_{:03}.svg", page);
+        println!("rendering labels_{:03}.html", page);
         let context = Context::from_serialize(render)?;
         let svg = svg_tera.render("mtg/label_page_proto.svg", &context)?;
-        let filename = format!("output/labels_{:03}.svg", page);
+        let filename = format!("output/labels_{:03}.html", page);
         std::fs::write(filename.as_str(), &svg)?;
 
         page += 1;

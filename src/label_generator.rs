@@ -128,7 +128,7 @@ impl LabelGenerator {
         let (mut x, mut y) = (start_x, start_y);
         let mut labels = Vec::new();
         for scryfall_set in sets {
-            labels.push(Label::new(scryfall_set, (x, y)));
+            labels.push(Label::new(scryfall_set, x, y));
 
             match labels.len() as u32 {
                 // Start a new page if needed
