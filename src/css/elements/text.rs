@@ -13,3 +13,9 @@ pub struct CssTextElement {
     text_transform:    CssTextTransform,
     text:              String
 }
+
+impl CssTextElement {
+    pub fn builder() -> CssTextElementBuilder {
+        CssTextElementBuilder::default()
+    }
+}

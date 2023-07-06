@@ -9,3 +9,9 @@ pub struct CssImageElement {
     height: CssLength,
     href:   String
 }
+
+impl CssImageElement {
+    pub fn builder() -> CssImageElementBuilder {
+        CssImageElementBuilder::default()
+    }
+}

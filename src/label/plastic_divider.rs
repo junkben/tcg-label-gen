@@ -1,9 +1,6 @@
 use crate::{
     css::{
-        elements::{
-            CssImageElement, CssImageElementBuilder, CssTextElement,
-            CssTextElementBuilder
-        },
+        elements::{CssImageElement, CssTextElement},
         properties::{CssFont, CssFontSize, CssFontWeight, CssLength}
     },
     scryfall::ScryfallSet
@@ -12,19 +9,23 @@ use crate::{
 const NAME_LEN_MAX: usize = 24;
 
 #[derive(Serialize, Debug, Clone, Default)]
-pub struct Label {
+pub struct LabelPlasticDivider {
     text_elements:  Vec<CssTextElement>,
     image_elements: Vec<CssImageElement>
 }
 
-impl Label {
-    pub fn new(scryfall_set: ScryfallSet, x: u32, y: u32) -> Label {
+impl LabelPlasticDivider {
+    pub fn new(
+        scryfall_set: ScryfallSet,
+        x: u32,
+        y: u32
+    ) -> LabelPlasticDivider {
         let name = match scryfall_set.name() {
             n if n.len() > NAME_LEN_MAX => n[..NAME_LEN_MAX].to_owned(),
             n => n.to_owned()
         };
 
-        let name_text_element = CssTextElementBuilder::default()
+        let name_text_element = CssTextElement::builder()
             .x(CssLength::pixels(x + 30))
             .y(CssLength::pixels(y + 30))
             .font_size(CssFontSize::Length(CssLength::pixels(35)))
@@ -34,7 +35,7 @@ impl Label {
             .build()
             .unwrap();
 
-        let set_text_element = CssTextElementBuilder::default()
+        let set_text_element = CssTextElement::builder()
             .x(CssLength::pixels(x + 30))
             .y(CssLength::pixels(y + 70))
             .font_size(CssFontSize::Length(CssLength::pixels(25)))
@@ -47,7 +48,7 @@ impl Label {
             .build()
             .unwrap();
 
-        let set_icon = CssImageElementBuilder::default()
+        let set_icon = CssImageElement::builder()
             .x(CssLength::pixels(x + 490))
             .y(CssLength::pixels(y + 20))
             .width(CssLength::pixels(70))
@@ -56,7 +57,7 @@ impl Label {
             .build()
             .unwrap();
 
-        Label {
+        LabelPlasticDivider {
             text_elements:  Vec::from([name_text_element, set_text_element]),
             image_elements: Vec::from([set_icon])
         }

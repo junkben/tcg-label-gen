@@ -1,7 +1,7 @@
 use crate::{
     cutting_guide::CuttingGuide,
     filters::SetTypeFilter,
-    label::Label,
+    label::plastic_divider::LabelPlasticDivider,
     label_render::MtgLabelSvgRender,
     paper_size::PaperSize,
     scryfall::{get_all_sets, ScryfallSet}
@@ -121,14 +121,14 @@ impl LabelGenerator {
         Ok(filtered_sets)
     }
 
-    fn create_labels(&self) -> anyhow::Result<Vec<Label>> {
+    fn create_labels(&self) -> anyhow::Result<Vec<LabelPlasticDivider>> {
         let sets = self.get_sets()?;
         let (start_x, start_y) = (self.margin, self.margin);
 
         let (mut x, mut y) = (start_x, start_y);
         let mut labels = Vec::new();
         for scryfall_set in sets {
-            labels.push(Label::new(scryfall_set, x, y));
+            labels.push(LabelPlasticDivider::new(scryfall_set, x, y));
 
             match labels.len() as u32 {
                 // Start a new page if needed
@@ -154,7 +154,7 @@ impl LabelGenerator {
     pub fn create_label_svg_renders(
         &self
     ) -> anyhow::Result<Vec<MtgLabelSvgRender>> {
-        let labels: Vec<Label> = self.create_labels()?;
+        let labels: Vec<LabelPlasticDivider> = self.create_labels()?;
         let horizontal_guides = self.create_horizontal_cutting_guides();
         let vertical_guides = self.create_vertical_cutting_guides();
         let paper_width = self.paper_size.width_mm();

@@ -26,8 +26,7 @@
                 width="{{ li.width }}"
                 height="{{ li.height }}"
                 href="{{ li.href }}"
-            ></image>
-            {% endfor %}
+            ></image>{% endfor %}
         </g>
         {% endfor %}
 

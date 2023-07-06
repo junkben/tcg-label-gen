@@ -1,8 +1,10 @@
-use crate::{cutting_guide::CuttingGuide, label::Label};
+use crate::{
+    cutting_guide::CuttingGuide, label::plastic_divider::LabelPlasticDivider
+};
 
 #[derive(Debug, Serialize)]
 pub struct MtgLabelSvgRender {
-    pub labels:            Vec<Label>,
+    pub labels:            Vec<LabelPlasticDivider>,
     pub horizontal_guides: Vec<CuttingGuide>,
     pub vertical_guides:   Vec<CuttingGuide>,
     pub paper_width:       u32,

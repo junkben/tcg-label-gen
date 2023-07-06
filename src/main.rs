@@ -16,6 +16,7 @@ mod label_generator;
 mod label_render;
 mod paper_size;
 mod scryfall;
+mod websafe;
 
 fn main() { go().expect("go failed") }
 
